@@ -150,7 +150,7 @@ homekit_accessory_t *accessories[] = {
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "iTEAD"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "037A2BABF19D"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Basic"),
-            HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1.6"),
+            HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1.7"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, switch_identify),
             NULL
         }),
@@ -166,7 +166,7 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "111-11-111"
+    .password = "123-45-678"
 };
 
 void on_wifi_ready() {
@@ -191,10 +191,15 @@ void user_init(void) {
 
     create_accessory_name();
     
-    wifi_config_init("sonoff-switch", NULL, on_wifi_ready);
+    wifi_config_init("sonoff-relay", NULL, on_wifi_ready);
     gpio_init();
 
     if (button_create(button_gpio, 0, 4000, button_callback)) {
         printf("Failed to initialize button\n");
     }
+    
+    // Turn on output and LED when boot finished
+    relay_write(true);
+    led_write(true);    
+
 }
